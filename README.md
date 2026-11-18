@@ -1,8 +1,3 @@
-# Week 6 – RAG Assessment (Qdrant + Ollama)
-
-A Windows-friendly, four-task implementation covering embeddings, chunking, stable IDs,
-FAISS ANN/HNSW, Qdrant vector storage, FastAPI search and retrieval evaluation.
-
 ## 1. Requirements
 
 - Windows 10/11, Python 3.10–3.12 recommended
@@ -128,53 +123,3 @@ pytest -v
 
 Seven tests cover health, valid search, API-key protection, top_k lower/upper bounds,
 empty query validation and document-type filtering.
-
-## 8. Architecture
-
-```text
-PDF / DOCX / TXT
-      |
-      v
-PyMuPDF / python-docx / text reader
-      |
-      v
-Recursive chunking + metadata + deterministic IDs
-      |
-      v
-all-MiniLM-L6-v2 (384-D embeddings)
-      |
-      v
-Qdrant (Cosine + HNSW + payload filters)
-      |
-      v
-FastAPI /search  ---> hit@k and MRR evaluation
-```
-
-## 9. Limitations and interpretation
-
-- The local MiniLM model and Ollama embedding model have different dimensions; do not mix
-  vectors in one Qdrant collection.
-- The fixed-size demonstration in Task 2 is character-based to make boundaries visible.
-  Token-aware splitting can be substituted for strict token-count experiments.
-- The ten-question chunk-size experiment is a starter harness; use questions and answer
-  spans verified against your own documents before reporting final hit rates.
-- The Qdrant demo deletes the first source to demonstrate deletion; re-run Task 2 and Task 3
-  to rebuild the full collection.
-- Similarity is not proof of factual correctness. Validate retrieval with labelled queries.
-- ANN timing varies by CPU, RAM, FAISS build, and system load; report your measured values.
-
-## 10. Five-minute demo outline
-
-1. Show the five source documents and run Task 2.
-2. Explain metadata and stable IDs; rerun to show count remains stable.
-3. Run Task 3; compare exact vs HNSW recall and inspect Qdrant filtering.
-4. Start FastAPI, call `/health`, search, then upload a new file.
-5. Run pytest and show hit@k/MRR evaluation.
-
-## 11. Submission checklist
-
-- [ ] Run all four tasks on your laptop and retain actual console outputs.
-- [ ] Replace the starter QA pairs with ten verified document questions.
-- [ ] Run both chunk-size configurations and save measured hit@k/MRR.
-- [ ] Add your screenshots, GitHub repository URL and merged PR details.
-- [ ] Do not copy the illustrative timing values from the assessment brief as your own results.
